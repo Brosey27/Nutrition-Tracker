@@ -7,36 +7,46 @@ const carbsInput = document.getElementById('carbs');
 const addEntryButton = document.getElementById('addEntry');
 const entryList = document.getElementById('entryList');
 entryList.addEventListener('click', deleteEntry);
-const entries = [];
+const storedEntries = JSON.parse(localStorage.getItem('entries')) || [];
+let entries = storedEntries;
+
+updateUI();
+
+entryList.addEventListener('click', deleteEntry);
 
 function deleteEntry(event) {
-    if (event.target.classList.contains('delete-entry')) {
-      const entryIndex = parseInt(event.target.dataset.index, 10);
-      entries.splice(entryIndex, 1); // Remove the entry from the entries array
-      updateUI();
-    }
+  if (event.target.classList.contains('delete-entry')) {
+    const entryIndex = parseInt(event.target.dataset.index, 10);
+    entries.splice(entryIndex, 1); // Remove the entry from the entries array
+    updateUI();
+    saveEntriesToLocalStorage(); // Save updated entries to localStorage
   }
+}
 
 addEntryButton.addEventListener('click', addEntry);
 
-
-
 function addEntry() {
     const meal = mealInput.value;
-    const calories = parseInt(caloriesInput.value, 10);
+    const calories = parseInt(caloriesInput.value);
     const fiber = parseFloat(fiberInput.value);
     const protein = parseFloat(proteinInput.value);
     const carbs = parseFloat(carbsInput.value);
   
     if (meal && !isNaN(calories) && !isNaN(fiber) && !isNaN(protein) && !isNaN(carbs)) {
       const entry = { meal, calories, fiber, protein, carbs };
-      displayEntry(entry, entries.length); // Pass the index
       entries.push(entry); // Add the new entry to the array
-      clearInputs(); // Call the clearInputs function
+      clearInputs();
+      updateUI();
+      saveEntriesToLocalStorage(); // Save updated entries to localStorage
     } else {
       console.log('Invalid input for entry.');
     }
   }
+  
+  function saveEntriesToLocalStorage() {
+    localStorage.setItem('entries', JSON.stringify(entries));
+  }
+  
   
   // Define the clearInputs function
   function clearInputs() {
