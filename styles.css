@@ -47,5 +47,10 @@ body {
     padding: 10px;
     border-bottom: 1px solid #ccc;
   }
-  
+  .entry-header {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 8px; /* Add some spacing between the header and the pie chart */
+  }
   

@@ -70,18 +70,36 @@ function addEntry() {
   
   function displayEntry(entry, index) {
     const listItem = document.createElement('li');
-    listItem.innerHTML = `
-      <strong>Date: ${entry.date}</strong> - ${entry.meal} - Calories: ${entry.calories}, Fiber: ${entry.fiber}g, Protein: ${entry.protein}g, Carbs: ${entry.carbs}g
+  
+    // Create a div to hold the date and meal name
+    const entryHeader = document.createElement('div');
+    entryHeader.className = 'entry-header';
+    entryHeader.innerHTML = `
+      <strong>Date: ${entry.date}</strong> - ${entry.meal}
     `;
   
+    // Create a button for deleting the entry
     const deleteButton = document.createElement('button');
     deleteButton.textContent = 'Delete';
     deleteButton.className = 'delete-entry';
     deleteButton.dataset.index = index; // Store the index of the entry
+  
+    listItem.appendChild(entryHeader);
     listItem.appendChild(deleteButton);
+    
+    // Create a canvas for the pie chart
+    const chartCanvas = document.createElement('canvas');
+    chartCanvas.id = `chart-${index}`;
+    chartCanvas.width = 200;
+    chartCanvas.height = 200;
+  
+    listItem.appendChild(chartCanvas);
   
     entryList.appendChild(listItem);
+  
+    createPieChart(entry, index); // Create the pie chart
   }
+  
   
   function updateUI() {
     entryList.innerHTML = '';
@@ -90,3 +108,33 @@ function addEntry() {
       displayEntry(entry, index);
     });
   }
+
+  function createPieChart(entry, index) {
+    const chartElement = document.getElementById(`chart-${index}`);
+    const ctx = chartElement.getContext('2d');
+  
+    const data = {
+      labels: ['Calories', 'Fiber', 'Protein', 'Carbs'],
+      datasets: [{
+        data: [entry.calories, entry.fiber, entry.protein, entry.carbs],
+        backgroundColor: ['#FF6384', '#36A2EB', '#FFCE56', '#4CAF50']
+      }]
+    };
+  
+    new Chart(ctx, {
+      type: 'pie',
+      data: data,
+      options: {
+        tooltips: {
+          callbacks: {
+            label: function(tooltipItem, data) {
+              const label = data.labels[tooltipItem.index];
+              const value = data.datasets[tooltipItem.datasetIndex].data[tooltipItem.index];
+              return `${label}: ${value}g`;
+            }
+          }
+        }
+      }
+    });
+  }
+  

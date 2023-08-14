@@ -4,13 +4,18 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="stylesheet" href="styles.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.7.0/chart.min.js"></script>
+  "></script>
   <title>Nutrition Tracker</title>
+  
 </head>
 <body>
   <div class="container">
     <h1>Nutrition Tracker</h1>
     <div class="entry-form">
-      <label for="meal">Date & Meal Name:</label>
+      <label for="date">Date:</label>
+      <input type="date" id="date" required>
+      <label for="meal">Meal Name:</label>
       <input type="text" id="meal" placeholder="Enter meal name">
       <label for="calories">Caloric Amount (kcal):</label>
       <input type="number" id="calories" placeholder="Enter caloric amount in kcal">
@@ -20,12 +25,15 @@
       <input type="number" id="fiber" placeholder="Enter fiber amount in grams">
       <label for="carbs">Carb Amount (g):</label>
       <input type="number" id="carbs" placeholder="Enter carb amount in grams">
-      <button id="addEntry">Add Entry</button>    </div>
+      <button id="addEntry">Add Entry</button>    
+    </div>
     <div class="entries">
       <h2>Entries</h2>
       <ul id="entryList"></ul>
     </div>
   </div>
   <script src="script.js"></script>
+  
+
 </body>
 </html>
