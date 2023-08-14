@@ -31,9 +31,19 @@ function addEntry() {
     const fiber = parseFloat(fiberInput.value);
     const protein = parseFloat(proteinInput.value);
     const carbs = parseFloat(carbsInput.value);
+    const rawDate = document.getElementById('date').value; // Get the selected date in yyyy-mm-dd format
+    const dateParts = rawDate.split('-'); // Split the date into parts
   
-    if (meal && !isNaN(calories) && !isNaN(fiber) && !isNaN(protein) && !isNaN(carbs)) {
-      const entry = { meal, calories, fiber, protein, carbs };
+    if (meal && !isNaN(calories) && !isNaN(fiber) && !isNaN(protein) && !isNaN(carbs) && rawDate) {
+      const formattedDate = `${dateParts[2]}/${dateParts[1]}/${dateParts[0].substring(2)}`;
+      const entry = {
+        meal,
+        calories,
+        fiber,
+        protein,
+        carbs,
+        date: formattedDate
+      };
       entries.push(entry); // Add the new entry to the array
       clearInputs();
       updateUI();
@@ -42,6 +52,7 @@ function addEntry() {
       console.log('Invalid input for entry.');
     }
   }
+  
   
   function saveEntriesToLocalStorage() {
     localStorage.setItem('entries', JSON.stringify(entries));
@@ -60,7 +71,7 @@ function addEntry() {
   function displayEntry(entry, index) {
     const listItem = document.createElement('li');
     listItem.innerHTML = `
-      <strong>${entry.meal}</strong> - Calories: ${entry.calories}, Fiber: ${entry.fiber}g, Protein: ${entry.protein}g, Carbs: ${entry.carbs}g
+      <strong>Date: ${entry.date}</strong> - ${entry.meal} - Calories: ${entry.calories}, Fiber: ${entry.fiber}g, Protein: ${entry.protein}g, Carbs: ${entry.carbs}g
     `;
   
     const deleteButton = document.createElement('button');
