@@ -33,6 +33,8 @@ function addEntry() {
     const carbs = parseFloat(carbsInput.value);
     const rawDate = document.getElementById('date').value; // Get the selected date in yyyy-mm-dd format
     const dateParts = rawDate.split('-'); // Split the date into parts
+    const rawChartSize = document.getElementById('chartSize').value.trim().toLowerCase();
+    const canvasSize = rawChartSize === 'small' ? 150 : rawChartSize === 'large' ? 300 : 200;
   
     if (meal && !isNaN(calories) && !isNaN(fiber) && !isNaN(protein) && !isNaN(carbs) && rawDate) {
       const formattedDate = `${dateParts[2]}/${dateParts[1]}/${dateParts[0].substring(2)}`;
@@ -42,7 +44,8 @@ function addEntry() {
         fiber,
         protein,
         carbs,
-        date: formattedDate
+        date: formattedDate,
+        chartSize: canvasSize
       };
       entries.push(entry); // Add the new entry to the array
       clearInputs();
@@ -112,6 +115,16 @@ function addEntry() {
   function createPieChart(entry, index) {
     const chartElement = document.getElementById(`chart-${index}`);
     const ctx = chartElement.getContext('2d');
+
+    let canvasSize = 200; // Default size
+    if (entry.chartSize === 'small') {
+      canvasSize = 150;
+    } else if (entry.chartSize === 'large') {
+      canvasSize = 300;
+    }
+  
+    chartElement.width = canvasSize;
+    chartElement.height = canvasSize;
   
     const data = {
       labels: ['Calories', 'Fiber', 'Protein', 'Carbs'],
